@@ -7,6 +7,7 @@
 ## Features
 
 - Fast and reliable due to [Playwright](https://github.com/microsoft/playwright).
+- Use Chromium 89.0.4344.0.
 - Render any URL or static HTML to PDF.
 - Sandbox mode with network and javascript disabled.
 - Healthcheck endpoint.
