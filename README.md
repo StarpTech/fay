@@ -7,6 +7,7 @@ Fay is a HTTP Service which expose the PDF rendering capabilities of [Playwright
 ```
 docker run --rm -p 3000:3000 starptech/fay
 ```
+_The image is relatively big due to the playwright base image. This might be improved in the future. Versioning will be added soon as well._
 
 ## Endpoints
 
