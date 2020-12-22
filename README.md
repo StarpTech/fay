@@ -3,6 +3,7 @@
 </p>
 <h3 align="center">Fay</h3>
 <p align="center">HTTP Service that expose the PDF rendering capabilities of <a href="https://github.com/microsoft/playwright">Playwright</a>.</p>
+<p align="center"><a href="https://hub.docker.com/repository/docker/starptech/fay">Dockerhub</a> &#183; <a href="/loadtesting/README.md">Load tests</a> &#183; <a href="/.github/CONTRIBUTING.md">Contributing</a></p>
 
 ## Features
 
@@ -51,13 +52,6 @@ For more informations check the [load-test](./loadtesting/README.md).
 ## Best practice
 
 In order to produce reproducible results try to avoid downloading external resources you can't control and executing javascript. You can inline images and styles in the document. Use the options `offline=true` and `javaScriptEnabled=false` to enforce that. Fonts can be embedded in the docker image to make them accesible to the chromium browser.
-
-## Development
-
-1. Install `npm install -g serve`.
-2. Serve example template `serve -l 3001 ./example`.
-3. Run server `go run cmd/fay/main.go`.
-4. Open swagger [endpoint](http://localhost:3000/swagger/index.html).
 
 ## Credits
 
