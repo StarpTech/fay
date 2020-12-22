@@ -21,10 +21,11 @@ func (ctrl *Http) Ping(c echo.Context) error {
 }
 
 type ConvertRequest struct {
-	URL               string `form:"url" query:"url" valid:"url,required"`
+	URL               string `form:"url" query:"url" valid:"url"`
 	Locale            string `form:"locale" query:"locale"`
 	JavaScriptEnabled bool   `form:"javaScriptEnabled" query:"javaScriptEnabled"`
 	Format            string `form:"format" query:"format" valid:"in(Letter|Legal|Tabloid|Ledger|A0|A1|A2|A4|A5|A6)"`
+	Offline           bool   `form:"offline" query:"offline"`
 
 	MarginTop    string `form:"marginTop" query:"marginTop"`
 	MarginRight  string `form:"marginRight" query:"marginRight"`
@@ -33,6 +34,7 @@ type ConvertRequest struct {
 
 	FooterTemplate string `form:"footerTemplate"`
 	HeaderTemplate string `form:"headerTemplate"`
+	HTML           string `form:"html"`
 }
 
 func (ctrl *Http) ConvertHTML(c echo.Context) error {
@@ -99,6 +101,28 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	}
 
 	/*
+		HTML template
+	*/
+	htmlTemplateFile, err := c.FormFile("html")
+	if err == nil {
+		htmlTemplateSrc, err := htmlTemplateFile.Open()
+		if err != nil {
+			c.Logger().Errorf("could not open html: %s", err)
+			return c.String(http.StatusBadRequest, "")
+		}
+		defer htmlTemplateSrc.Close()
+
+		if b, err := ioutil.ReadAll(htmlTemplateSrc); err == nil {
+			u.HTML = string(b)
+		} else {
+			c.Logger().Errorf("could not read html: %s", err)
+		}
+	} else if err != http.ErrMissingFile {
+		c.Logger().Errorf("could not get form value html: %s", err)
+		return c.String(http.StatusBadRequest, "")
+	}
+
+	/*
 		Defaults
 	*/
 	if u.FooterTemplate == "" {
@@ -128,21 +152,28 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	/*
 		Open a new page. Playwright will handle the queue.
 	*/
-	page, err := browserContext.NewPage()
+	page, err := browserContext.NewPage(playwright.BrowserNewPageOptions{
+		Offline: playwright.Bool(u.Offline),
+	})
 	if err != nil {
 		c.Logger().Error("could not create new page")
 		return c.HTML(http.StatusInternalServerError, "")
 	}
-	_, err = page.Goto(u.URL, playwright.PageGotoOptions{
-		Timeout: playwright.Int(10000),
-	})
-	if err != nil {
-		c.Logger().Errorf("could not go to page: %s", err)
-		return c.HTML(http.StatusBadGateway, "")
-	}
-	if err != nil {
-		c.Logger().Errorf("could not set page content: %s", err)
-		return c.HTML(http.StatusInternalServerError, "")
+	if u.URL != "" {
+		_, err = page.Goto(u.URL, playwright.PageGotoOptions{
+			Timeout: playwright.Int(10000),
+		})
+		if err != nil {
+			c.Logger().Errorf("could not go to page: %s", err)
+			return c.HTML(http.StatusBadGateway, "")
+		}
+	} else {
+		err := page.SetContent(u.HTML)
+		if err != nil {
+			c.Logger().Errorf("could not set page content: %s", err)
+			return c.HTML(http.StatusInternalServerError, "")
+		}
+
 	}
 
 	page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: "print"})
