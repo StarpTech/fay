@@ -3,7 +3,6 @@ import { Counter } from "k6/metrics";
 import { check } from "k6";
 
 let headerFile = open("../example/header.html", "b");
-let pageFile = open("../example/page.html", "b");
 
 let failCounter = new Counter("failed requests");
 
@@ -22,8 +21,8 @@ export let options = {
 export default function () {
   let data = {
     headerTemplate: http.file(headerFile, "header.html"),
-    html: http.file(pageFile, "page.html"),
     format: "A4",
+    url: "http://localhost:3001/page.html",
   };
   let res = http.post(__ENV.BASE_URL + "/convert", data);
   check(res, {

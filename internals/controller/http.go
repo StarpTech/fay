@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -202,8 +201,6 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 			Left:   u.MarginLeft,
 		},
 	})
-
-	fmt.Printf("%+v", u)
 
 	return c.Blob(200, "application/pdf", pdfBytes)
 }
