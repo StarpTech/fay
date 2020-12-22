@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -136,7 +137,7 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		u.Format = "A4"
 	}
 	if u.Media == "" {
-		u.Format = "print"
+		u.Media = "print"
 	}
 
 	/*
@@ -163,6 +164,9 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		c.Logger().Error("could not create new page")
 		return c.HTML(http.StatusInternalServerError, "")
 	}
+
+	page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media})
+
 	if u.URL != "" {
 		_, err = page.Goto(u.URL, playwright.PageGotoOptions{
 			Timeout: playwright.Int(10000),
@@ -182,8 +186,6 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 
 	}
 
-	page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media})
-
 	/*
 		Render page
 	*/
@@ -200,6 +202,8 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 			Left:   u.MarginLeft,
 		},
 	})
+
+	fmt.Printf("%+v", u)
 
 	return c.Blob(200, "application/pdf", pdfBytes)
 }
