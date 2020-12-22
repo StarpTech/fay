@@ -7,5 +7,5 @@ RUN chmod +x ./scripts/build.sh && ./scripts/build.sh
 
 FROM base as production
 COPY --from=builder /go/src/app/fay .
-EXPOSE 8080
+EXPOSE 3000
 CMD ["./fay"]
