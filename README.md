@@ -58,4 +58,5 @@ curl --request POST \
 
 ## Credits
 
-https://github.com/thecodingmachine/gotenberg
+- https://github.com/mxschmitt/playwright-go
+- https://github.com/thecodingmachine/gotenberg
