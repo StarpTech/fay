@@ -18,7 +18,7 @@ docker run --rm -p 3000:3000 starptech/fay
   - `media` (form,query, **default:** `print`): Page media emulation.
   - `javaScriptEnabled` (form,query, **default:** `false`): Enable javascript on the website.
   - `marginTop,marginRight,marginBottom,marginLeft` (form,query, **default:** `0`): Set page margin.
-  - `html` (file, **default:** ``): Conmvert the HTML to PDF.
+  - `html` (file, **default:** ``): Convert the HTML to PDF instead `url`.
   - `headerTemplate` (file, **default:** `<span></span>`): Header template.
   - `footerTemplate` (file, **default:** `<span></span>`): Footer template.
 - `/ping` - **Check if the server is ready to accept requests.**
