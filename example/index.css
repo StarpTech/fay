@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap");
+
+.page {
+  page-break-after: always;
+  padding: 0 0.5in;
+}
+html,
+body {
+  font-family: "Nunito", sans-serif;
+  color: #1f2238;
+  font-size: 16px;
+}
+
+header {
+  /* -webkit-print-color-adjust: exact; */
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+h1 {
+  font-size: 12pt;
+}
