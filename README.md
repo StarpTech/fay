@@ -1,6 +1,8 @@
-# 🧚‍♂️ Fay - HTML to PDF rendering service
-
-Fay is a HTTP Service which expose the PDF rendering capabilities of [Playwright](https://github.com/microsoft/playwright) to automate [Chromium](https://www.chromium.org/Home).
+<p align="center">
+    <img src="https://raw.githubusercontent.com/StarpTech/fay/main/assets/logo.png" alt="fay logo"/>
+</p>
+<h3 align="center">Fay</h3>
+<p align="center">HTTP Service that expose the PDF rendering capabilities of <a href="https://github.com/microsoft/playwright">Playwright</a>.</p>
 
 ## Features
 
@@ -60,3 +62,4 @@ In order to produce reproducible results try to avoid downloading external resou
 
 - https://github.com/mxschmitt/playwright-go
 - https://github.com/thecodingmachine/gotenberg
+- <a target="_blank" href="https://icons8.com/icons/set/elf--v2">Elf icon</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
