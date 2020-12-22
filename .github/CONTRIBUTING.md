@@ -21,7 +21,10 @@ find below useful information about how to contribute to the Fay project.
 
 ### Testing
 
-TBD.
+```bash
+./scripts/test.sh
+./scripts/coverage.sh
+```
 
 ## Development
 
