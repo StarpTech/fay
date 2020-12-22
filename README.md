@@ -14,7 +14,7 @@ docker run --rm -p 3000:3000 starptech/fay
   - `url` (form,query): The url of the website to convert.
   - `locale` (form,query, **default:** `en-US`): Browser locale.
   - `format` (form,query, **default:** `A4`): Page format.
-  - `offline` (form,query, **default:** `false`): Doesn't allow loading external resources.
+  - `offline` (form,query, **default:** `false`): Enable loading external resources.
   - `media` (form,query, **default:** `print`): Page media emulation.
   - `javaScriptEnabled` (form,query, **default:** `false`): Enable javascript on the website.
   - `marginTop,marginRight,marginBottom,marginLeft` (form,query, **default:** `0`): Set page margin.
