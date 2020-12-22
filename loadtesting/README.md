@@ -30,35 +30,35 @@ Memory: 31773MiB
   / __________ \  |__| \__\ \_____/ .io
 
   execution: local
-     script: html.js
+     script: url.js
      output: -
 
   scenarios: (100.00%) 1 scenario, 20 max VUs, 5m30s max duration (incl. graceful stop):
            * default: Up to 20 looping VUs for 5m0s over 1 stages (gracefulRampDown: 30s, gracefulStop: 30s)
 
 
-running (5m00.6s), 00/20 VUs, 3141 complete and 0 interrupted iterations
+running (5m01.1s), 00/20 VUs, 3949 complete and 0 interrupted iterations
 default ✓ [======================================] 00/20 VUs  5m0s
 
     ✓ is status 200
     ✓ is not status 504
     ✓ is not status 500
 
-    checks.....................: 100.00% ✓ 9423 ✗ 0   
-    data_received..............: 71 MB   237 kB/s
-    data_sent..................: 2.9 MB  9.6 kB/s
-    http_req_blocked...........: avg=7.27µs   min=1.88µs   med=5.04µs   max=686.1µs  p(90)=7.12µs  p(95)=8.73µs 
-    http_req_connecting........: avg=1.34µs   min=0s       med=0s       max=496.64µs p(90)=0s      p(95)=0s     
-    http_req_duration..........: avg=956.65ms min=255.16ms med=945.49ms max=2.18s    p(90)=1.28s   p(95)=1.42s  
-    http_req_receiving.........: avg=16.7ms   min=1.77ms   med=14.06ms  max=135.96ms p(90)=33.67ms p(95)=39.97ms
-    http_req_sending...........: avg=37.09µs  min=14.2µs   med=31.54µs  max=5.54ms   p(90)=44.07µs p(95)=48.99µs
+    checks.....................: 100.00% ✓ 11847 ✗ 0   
+    data_received..............: 785 MB  2.6 MB/s
+    data_sent..................: 3.6 MB  12 kB/s
+    http_req_blocked...........: avg=3.21µs   min=1.07µs   med=2.42µs   max=252.57µs p(90)=3.38µs  p(95)=3.77µs 
+    http_req_connecting........: avg=438ns    min=0s       med=0s       max=116.65µs p(90)=0s      p(95)=0s     
+    http_req_duration..........: avg=762.7ms  min=196.94ms med=702.44ms max=2.05s    p(90)=1.27s   p(95)=1.41s  
+    http_req_receiving.........: avg=2.66ms   min=1.12ms   med=1.96ms   max=16.23ms  p(90)=4.73ms  p(95)=5.79ms 
+    http_req_sending...........: avg=21.17µs  min=8.89µs   med=18.24µs  max=7.53ms   p(90)=23.83µs p(95)=25.93µs
     http_req_tls_handshaking...: avg=0s       min=0s       med=0s       max=0s       p(90)=0s      p(95)=0s     
-    http_req_waiting...........: avg=939.91ms min=251.45ms med=930.29ms max=2.14s    p(90)=1.26s   p(95)=1.4s   
-    http_reqs..................: 3141    10.448383/s
-    iteration_duration.........: avg=956.98ms min=255.46ms med=945.79ms max=2.18s    p(90)=1.28s   p(95)=1.42s  
-    iterations.................: 3141    10.448383/s
-    vus........................: 19      min=1  max=19
-    vus_max....................: 20      min=20 max=20
+    http_req_waiting...........: avg=760.02ms min=195.3ms  med=699.95ms max=2.05s    p(90)=1.26s   p(95)=1.4s   
+    http_reqs..................: 3949    13.113461/s
+    iteration_duration.........: avg=762.91ms min=197.12ms med=702.63ms max=2.05s    p(90)=1.27s   p(95)=1.41s  
+    iterations.................: 3949    13.113461/s
+    vus........................: 7       min=1   max=19
+    vus_max....................: 20      min=20  max=20
 ```
 
 ## Send static HTML
@@ -93,26 +93,26 @@ Memory: 31773MiB
            * default: Up to 20 looping VUs for 5m0s over 1 stages (gracefulRampDown: 30s, gracefulStop: 30s)
 
 
-running (5m00.6s), 00/20 VUs, 4096 complete and 0 interrupted iterations
+running (5m00.3s), 00/20 VUs, 9024 complete and 0 interrupted iterations
 default ✓ [======================================] 00/20 VUs  5m0s
 
     ✓ is not status 500
     ✓ is status 200
     ✓ is not status 504
 
-    checks.....................: 100.00% ✓ 12288 ✗ 0   
-    data_received..............: 725 MB  2.4 MB/s
-    data_sent..................: 13 MB   43 kB/s
-    http_req_blocked...........: avg=7.1µs    min=1.79µs   med=5µs      max=2.81ms  p(90)=6.64µs  p(95)=7.98µs 
-    http_req_connecting........: avg=1.47µs   min=0s       med=0s       max=2.69ms  p(90)=0s      p(95)=0s     
-    http_req_duration..........: avg=733.68ms min=180.54ms med=696.93ms max=1.74s   p(90)=1.17s   p(95)=1.29s  
-    http_req_receiving.........: avg=15.83ms  min=165.64µs med=12.19ms  max=106.3ms p(90)=33.3ms  p(95)=41.98ms
-    http_req_sending...........: avg=45.77µs  min=13.19µs  med=31.11µs  max=11.2ms  p(90)=42.56µs p(95)=47.41µs
-    http_req_tls_handshaking...: avg=0s       min=0s       med=0s       max=0s      p(90)=0s      p(95)=0s     
-    http_req_waiting...........: avg=717.79ms min=178.26ms med=682.23ms max=1.71s   p(90)=1.14s   p(95)=1.26s  
-    http_reqs..................: 4096    13.625701/s
-    iteration_duration.........: avg=734.02ms min=180.74ms med=697.3ms  max=1.74s   p(90)=1.17s   p(95)=1.29s  
-    iterations.................: 4096    13.625701/s
+    checks.....................: 100.00% ✓ 27072 ✗ 0   
+    data_received..............: 1.6 GB  5.3 MB/s
+    data_sent..................: 28 MB   94 kB/s
+    http_req_blocked...........: avg=3.23µs   min=1.05µs   med=2.73µs   max=308.94µs p(90)=3.87µs   p(95)=4.42µs  
+    http_req_connecting........: avg=230ns    min=0s       med=0s       max=164.97µs p(90)=0s       p(95)=0s      
+    http_req_duration..........: avg=332.43ms min=136.55ms med=314.31ms max=1.22s    p(90)=487.62ms p(95)=575.57ms
+    http_req_receiving.........: avg=144.72µs min=67.05µs  med=133.43µs max=6.3ms    p(90)=178.31µs p(95)=205.22µs
+    http_req_sending...........: avg=23.67µs  min=8.09µs   med=19.92µs  max=6.81ms   p(90)=25.54µs  p(95)=27.78µs 
+    http_req_tls_handshaking...: avg=0s       min=0s       med=0s       max=0s       p(90)=0s       p(95)=0s      
+    http_req_waiting...........: avg=332.26ms min=136.45ms med=314.14ms max=1.22s    p(90)=487.46ms p(95)=575.45ms
+    http_reqs..................: 9024    30.054112/s
+    iteration_duration.........: avg=332.64ms min=136.76ms med=314.54ms max=1.22s    p(90)=487.85ms p(95)=575.77ms
+    iterations.................: 9024    30.054112/s
     vus........................: 19      min=1   max=19
     vus_max....................: 20      min=20  max=20
 ```
