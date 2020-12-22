@@ -71,12 +71,12 @@ type ConvertRequest struct {
 // @Success 200 {file} file
 // @Router /convert [post]
 func (ctrl *Http) ConvertHTML(c echo.Context) error {
-
 	/*
 		Extract data from request
 	*/
 	u := new(ConvertRequest)
 	if err := c.Bind(u); err != nil {
+		c.Logger().Errorf("request bind: %s", err)
 		return c.HTML(http.StatusBadRequest, "")
 	}
 
@@ -159,7 +159,7 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		Defaults
 	*/
 	if u.Filename == "" {
-		u.Media = "result.pdf"
+		u.Filename = "result.pdf"
 	}
 	if u.FooterTemplate == "" {
 		u.FooterTemplate = "<span></span>"
