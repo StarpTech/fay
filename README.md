@@ -7,19 +7,20 @@ Fay is a HTTP Service which expose the PDF rendering capabilities of [Playwright
 ```
 docker run --rm -p 3000:3000 starptech/fay
 ```
+
 _The image is relatively big due to the playwright base image. This might be improved in the future. Versioning will be added soon as well._
 
 ## Endpoints
 
 - `/convert` - **Converts a website to PDF document.**
-  - `url` (form,query): The url of the website to convert.
+  - `url` (form,query, **default:** `""`): The url of the website to convert.
+  - `html` (file, **default:** `""`): Convert the HTML to PDF instead `url`.
   - `locale` (form,query, **default:** `en-US`): Browser locale.
   - `format` (form,query, **default:** `A4`): Page format.
   - `offline` (form,query, **default:** `false`): Enable loading external resources.
   - `media` (form,query, **default:** `print`): Page media emulation.
   - `javaScriptEnabled` (form,query, **default:** `false`): Enable javascript on the website.
   - `marginTop,marginRight,marginBottom,marginLeft` (form,query, **default:** `0`): Set page margin.
-  - `html` (file, **default:** ``): Convert the HTML to PDF instead `url`.
   - `headerTemplate` (file, **default:** `<span></span>`): Header template.
   - `footerTemplate` (file, **default:** `<span></span>`): Footer template.
 - `/ping` - **Check if the server is ready to accept requests.**
