@@ -50,6 +50,7 @@ func TestDifferentFilename(t *testing.T) {
 
 	browser, err := pw.Chromium.Launch()
 	assert.NoError(t, err)
+	defer pw.Stop()
 	defer browser.Close()
 
 	e := echo.New()
@@ -84,6 +85,7 @@ func TestRenderUrlToPDF(t *testing.T) {
 
 	browser, err := pw.Chromium.Launch()
 	assert.NoError(t, err)
+	defer pw.Stop()
 	defer browser.Close()
 
 	e := echo.New()
@@ -117,6 +119,7 @@ func TestRenderHTMLToPDF(t *testing.T) {
 
 	browser, err := pw.Chromium.Launch()
 	assert.NoError(t, err)
+	defer pw.Stop()
 	defer browser.Close()
 
 	e := echo.New()
@@ -142,5 +145,43 @@ func TestRenderHTMLToPDF(t *testing.T) {
 		assert.Equal(t, "bytes", rec.HeaderMap.Get("accept-ranges"))
 		contentLength, _ := strconv.Atoi(rec.HeaderMap.Get("content-length"))
 		assert.Greater(t, contentLength, 200)
+	}
+}
+
+func TestPingOK(t *testing.T) {
+	pw, err := playwright.Run()
+	assert.NoError(t, err)
+
+	browser, err := pw.Chromium.Launch()
+	assert.NoError(t, err)
+	defer pw.Stop()
+	defer browser.Close()
+
+	e := echo.New()
+
+	req := httptest.NewRequest("GET", "/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	h := Http{
+		Browser: browser,
+	}
+
+	if assert.NoError(t, h.Ping(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+	}
+}
+
+func TestPingNotOK(t *testing.T) {
+	e := echo.New()
+
+	req := httptest.NewRequest("GET", "/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	h := Http{
+		Browser: &playwright.Browser{IsConnected: false},
+	}
+
+	if assert.NoError(t, h.Ping(c)) {
+		assert.Equal(t, http.StatusServiceUnavailable, rec.Code)
 	}
 }

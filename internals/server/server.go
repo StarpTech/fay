@@ -14,6 +14,7 @@ import (
 
 type Server struct {
 	browser *playwright.Browser
+	pw      *playwright.Playwright
 	Server  *echo.Echo
 }
 
@@ -44,12 +45,16 @@ func New() *Server {
 
 	return &Server{
 		browser: browser,
+		pw:      pw,
 		Server:  e,
 	}
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
 	if err := s.browser.Close(); err != nil {
+		return err
+	}
+	if err := s.pw.Stop(); err != nil {
 		return err
 	}
 	if err := s.Server.Shutdown(ctx); err != nil {
