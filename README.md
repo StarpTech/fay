@@ -34,6 +34,7 @@ _The image is relatively big due to the playwright base image. This might be imp
   - `headerTemplate` (file, **default:** `<span></span>`): Header template.
   - `footerTemplate` (file, **default:** `<span></span>`): Footer template.
 - `/ping` - **Check if the server is ready to accept requests.**
+- `/swagger/index.html` - **Swagger introspection**
 
 For detail description of the pdf options check the [playwright](https://playwright.dev/docs/api/class-page?_highlight=pdf#pagepdfoptions) documentation.
 
