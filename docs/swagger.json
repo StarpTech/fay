@@ -1,0 +1,146 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths": {
+        "/convert": {
+            "post": {
+                "description": "Converts a URL or HTML to PDF document",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/pdf"
+                ],
+                "tags": [
+                    "convert"
+                ],
+                "summary": "Converts a URL or HTML to PDF document",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "URL",
+                        "name": "url",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "default": "result.pdf",
+                        "description": "Filename of the resulting pdf",
+                        "name": "filename",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "HTML to convert",
+                        "name": "html",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "default": "en-US",
+                        "description": "Page locale",
+                        "name": "locale",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Javascript enabled",
+                        "name": "javaScriptEnabled",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "default": "A4",
+                        "description": "Page format",
+                        "name": "format",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable network connectivity",
+                        "name": "offline",
+                        "in": "formData"
+                    },
+                    {
+                        "enum": [
+                            "print",
+                            "screen"
+                        ],
+                        "type": "string",
+                        "default": "print",
+                        "description": "Page media mode",
+                        "name": "media",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page margin top",
+                        "name": "marginTop",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page margin right",
+                        "name": "marginRight",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page margin bottom",
+                        "name": "marginBottom",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page footer template",
+                        "name": "footerTemplate",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page header template",
+                        "name": "headerTemplate",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "Check if the server is ready to accept requests",
+                "tags": [
+                    "ping"
+                ],
+                "summary": "Check if the server is ready to accept requests",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

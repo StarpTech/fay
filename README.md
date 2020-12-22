@@ -2,6 +2,15 @@
 
 Fay is a HTTP Service which expose the PDF rendering capabilities of [Playwright](https://github.com/microsoft/playwright) to automate [Chromium](https://www.chromium.org/Home).
 
+## Features
+
+- Fast and reliable due to [Playwright](https://github.com/microsoft/playwright).
+- Render any URL or static HTML to PDF.
+- Sandbox mode with network and javascript disabled.
+- Healthcheck endpoint.
+- Ready to use docker image.
+- Swagger endpoint.
+
 ## Installation
 
 ```
@@ -13,11 +22,12 @@ _The image is relatively big due to the playwright base image. This might be imp
 ## Endpoints
 
 - `/convert` - **Converts a website to PDF document.**
+  - `filename` (form,query, **default:** `"result.pdf"`): Filename of the resulting pdf.
   - `url` (form,query, **default:** `""`): The url of the website to convert.
   - `html` (file, **default:** `""`): Convert the HTML to PDF instead `url`.
   - `locale` (form,query, **default:** `en-US`): Browser locale.
   - `format` (form,query, **default:** `A4`): Page format.
-  - `offline` (form,query, **default:** `false`): Enable loading external resources.
+  - `offline` (form,query, **default:** `false`): Disable network connectivity.
   - `media` (form,query, **default:** `print`): Page media emulation.
   - `javaScriptEnabled` (form,query, **default:** `false`): Enable javascript on the website.
   - `marginTop,marginRight,marginBottom,marginLeft` (form,query, **default:** `0`): Set page margin.
@@ -43,19 +53,7 @@ In order to produce reproducible results try to avoid downloading external resou
 1. Install `npm install -g serve`.
 2. Serve example template `serve -l 3001 ./example`.
 3. Run server `go run cmd/fay/main.go`.
-
-Convert a document.
-
-```
-curl --request POST \
-    --url http://localhost:3000/convert \
-    --header 'Content-Type: multipart/form-data' \
-    --form html=http://localhost:3001/page.html \
-    --form locale=de-DE \
-    --form marginTop=0.5in \
-    --form headerTemplate=@example/header.html \
-    -o html.pdf
-```
+4. Open swagger [endpoint](http://localhost:3000/swagger/index.html).
 
 ## Credits
 

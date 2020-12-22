@@ -1,5 +1,8 @@
 package main
 
+// @host localhost:3000
+// @BasePath /
+
 import (
 	"context"
 	"log"
@@ -7,6 +10,7 @@ import (
 	"os/signal"
 	"time"
 
+	_ "github.com/starptech/fay/docs"
 	"github.com/starptech/fay/internals/server"
 )
 

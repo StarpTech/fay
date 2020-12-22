@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"bytes"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
@@ -13,6 +16,13 @@ type Http struct {
 	Browser *playwright.Browser
 }
 
+// Ping godoc
+// @Summary Check if the server is ready to accept requests
+// @Description Check if the server is ready to accept requests
+// @Tags ping
+// @Success 200 {string} string	"ok"
+// @failure 400 {string} string	"error"
+// @Router /ping [get]
 func (ctrl *Http) Ping(c echo.Context) error {
 	if ctrl.Browser.IsConnected {
 		return c.HTML(http.StatusOK, "")
@@ -21,12 +31,13 @@ func (ctrl *Http) Ping(c echo.Context) error {
 }
 
 type ConvertRequest struct {
+	Filename          string `form:"filename" query:"filename"`
 	URL               string `form:"url" query:"url" valid:"url"`
 	Locale            string `form:"locale" query:"locale"`
 	JavaScriptEnabled bool   `form:"javaScriptEnabled" query:"javaScriptEnabled"`
 	Format            string `form:"format" query:"format" valid:"in(Letter|Legal|Tabloid|Ledger|A0|A1|A2|A4|A5|A6)"`
 	Offline           bool   `form:"offline" query:"offline"`
-	Media             string `form:"media" query:"media" valid:"in(screen,print)"`
+	Media             string `form:"media" query:"media" valid:"in(screen|print)"`
 
 	MarginTop    string `form:"marginTop" query:"marginTop"`
 	MarginRight  string `form:"marginRight" query:"marginRight"`
@@ -38,6 +49,27 @@ type ConvertRequest struct {
 	HTML           string `form:"html"`
 }
 
+// ConvertHTML godoc
+// @Summary Converts a URL or HTML to PDF document
+// @Description Converts a URL or HTML to PDF document
+// @Tags convert
+// @Accept multipart/form-data
+// @Param url formData string false "URL"
+// @Param filename formData string false "Filename of the resulting pdf" default(result.pdf)
+// @Param html formData string false "HTML to convert"
+// @Param locale formData string false "Page locale" default(en-US)
+// @Param javaScriptEnabled formData bool false "Javascript enabled" default(false)
+// @Param format formData string false "Page format" default(A4)
+// @Param offline formData bool false "Disable network connectivity" default(false)
+// @Param media formData string false "Page media mode" default(print) Enums(print,screen)
+// @Param marginTop formData string false "Page margin top"
+// @Param marginRight formData string false "Page margin right"
+// @Param marginBottom formData string false "Page margin bottom"
+// @Param footerTemplate formData string false "Page footer template"
+// @Param headerTemplate formData string false "Page header template"
+// @Produce application/pdf
+// @Success 200 {file} file
+// @Router /convert [post]
 func (ctrl *Http) ConvertHTML(c echo.Context) error {
 
 	/*
@@ -126,6 +158,9 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	/*
 		Defaults
 	*/
+	if u.Filename == "" {
+		u.Media = "result.pdf"
+	}
 	if u.FooterTemplate == "" {
 		u.FooterTemplate = "<span></span>"
 	}
@@ -202,5 +237,22 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		},
 	})
 
-	return c.Blob(200, "application/pdf", pdfBytes)
+	tmpfile, err := ioutil.TempFile(os.TempDir(), "fay-conversion-")
+	if err != nil {
+		c.Logger().Errorf("could not create temp pdf file: %s", err)
+		return c.HTML(http.StatusInternalServerError, "")
+	}
+	defer tmpfile.Close()
+	defer os.Remove(tmpfile.Name())
+
+	if _, err = io.Copy(tmpfile, bytes.NewReader(pdfBytes)); err != nil {
+		c.Logger().Errorf("could not write pdf to disk: %s", err)
+		return c.HTML(http.StatusInternalServerError, "")
+	}
+
+	if err := c.Attachment(tmpfile.Name(), u.Filename); err != nil {
+		c.Logger().Errorf("could not attach pdf: %s", err)
+	}
+
+	return nil
 }

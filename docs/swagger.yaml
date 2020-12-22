@@ -1,0 +1,98 @@
+basePath: /
+host: localhost:3000
+info:
+  contact: {}
+paths:
+  /convert:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Converts a URL or HTML to PDF document
+      parameters:
+      - description: URL
+        in: formData
+        name: url
+        type: string
+      - default: result.pdf
+        description: Filename of the resulting pdf
+        in: formData
+        name: filename
+        type: string
+      - description: HTML to convert
+        in: formData
+        name: html
+        type: string
+      - default: en-US
+        description: Page locale
+        in: formData
+        name: locale
+        type: string
+      - default: false
+        description: Javascript enabled
+        in: formData
+        name: javaScriptEnabled
+        type: boolean
+      - default: A4
+        description: Page format
+        in: formData
+        name: format
+        type: string
+      - default: false
+        description: Disable network connectivity
+        in: formData
+        name: offline
+        type: boolean
+      - default: print
+        description: Page media mode
+        enum:
+        - print
+        - screen
+        in: formData
+        name: media
+        type: string
+      - description: Page margin top
+        in: formData
+        name: marginTop
+        type: string
+      - description: Page margin right
+        in: formData
+        name: marginRight
+        type: string
+      - description: Page margin bottom
+        in: formData
+        name: marginBottom
+        type: string
+      - description: Page footer template
+        in: formData
+        name: footerTemplate
+        type: string
+      - description: Page header template
+        in: formData
+        name: headerTemplate
+        type: string
+      produces:
+      - application/pdf
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      summary: Converts a URL or HTML to PDF document
+      tags:
+      - convert
+  /ping:
+    get:
+      description: Check if the server is ready to accept requests
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+      summary: Check if the server is ready to accept requests
+      tags:
+      - ping
+swagger: "2.0"

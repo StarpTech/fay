@@ -8,6 +8,7 @@ import (
 	dLog "github.com/labstack/gommon/log"
 	"github.com/mxschmitt/playwright-go"
 	"github.com/starptech/fay/internals/controller"
+	"github.com/swaggo/echo-swagger"
 	"golang.org/x/net/context"
 )
 
@@ -39,6 +40,7 @@ func New() *Server {
 
 	e.POST("/convert", httpController.ConvertHTML)
 	e.GET("/ping", httpController.Ping)
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	return &Server{
 		browser: browser,
