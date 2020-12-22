@@ -45,7 +45,7 @@ For detail description of the pdf options check the [playwright](https://playwri
 
 ## Scalability
 
-Playwright is capable to maintain a pool of browser instances. This allows to handle many requests at the same time.
+Playwright is capable to maintain a pool of page instances. This allows to handle many requests at the same time.
 
 In a simple test we could serve up to 20 virtual users over a time window of 5min with an average request duration of ~1s and ~13 req/s. We were even capable to serve up to 100 virtual users over a time window of 5min without any error with an average request duration of ~4.25s and ~11 req/s.
 For more informations check the [load-test](./loadtesting/README.md).
