@@ -242,8 +242,8 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		c.Logger().Errorf("could not create temp pdf file: %s", err)
 		return c.HTML(http.StatusInternalServerError, "")
 	}
-	defer tmpfile.Close()
 	defer os.Remove(tmpfile.Name())
+	defer tmpfile.Close()
 
 	if _, err = io.Copy(tmpfile, bytes.NewReader(pdfBytes)); err != nil {
 		c.Logger().Errorf("could not write pdf to disk: %s", err)
