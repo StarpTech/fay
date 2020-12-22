@@ -26,6 +26,7 @@ type ConvertRequest struct {
 	JavaScriptEnabled bool   `form:"javaScriptEnabled" query:"javaScriptEnabled"`
 	Format            string `form:"format" query:"format" valid:"in(Letter|Legal|Tabloid|Ledger|A0|A1|A2|A4|A5|A6)"`
 	Offline           bool   `form:"offline" query:"offline"`
+	Media             string `form:"media" query:"media" valid:"in(screen,print)"`
 
 	MarginTop    string `form:"marginTop" query:"marginTop"`
 	MarginRight  string `form:"marginRight" query:"marginRight"`
@@ -134,6 +135,9 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	if u.Format == "" {
 		u.Format = "A4"
 	}
+	if u.Media == "" {
+		u.Format = "print"
+	}
 
 	/*
 		Create new browser context to avoid side-effects (cookies, storage etc...)
@@ -168,7 +172,9 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 			return c.HTML(http.StatusBadGateway, "")
 		}
 	} else {
-		err := page.SetContent(u.HTML)
+		err := page.SetContent(u.HTML, playwright.PageSetContentOptions{
+			Timeout: playwright.Int(10000),
+		})
 		if err != nil {
 			c.Logger().Errorf("could not set page content: %s", err)
 			return c.HTML(http.StatusInternalServerError, "")
@@ -176,7 +182,7 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 
 	}
 
-	page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: "print"})
+	page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media})
 
 	/*
 		Render page
