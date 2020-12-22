@@ -4,6 +4,7 @@
 <h3 align="center">Fay</h3>
 <p align="center">HTTP Service that expose the PDF rendering capabilities of <a href="https://github.com/microsoft/playwright">Playwright</a>.</p>
 <p align="center"><a href="https://hub.docker.com/repository/docker/starptech/fay">Dockerhub</a> &#183; <a href="/loadtesting/README.md">Load tests</a> &#183; <a href="/.github/CONTRIBUTING.md">Contributing</a></p>
+<p align="center"><a href="https://travis-ci.org/thecodingmachine/gotenberg" rel="nofollow"><img src="https://github.com/StarpTech/fay/workflows/tests/badge.svg" style="max-width:100%;"></a></p>
 
 ## Features
 
