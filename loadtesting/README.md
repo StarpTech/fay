@@ -17,7 +17,8 @@ Test machine:
 ```
 OS: Manjaro Linux x86_64
 CPU: Intel i7-10510U (8) @ 4.900GHz
-Memory: 31773MiB
+Memory: 31773MiB / DDR4 2666MHz
+Storage: NVMe
 ```
 
 ```bash
@@ -73,7 +74,8 @@ Test machine:
 ```
 OS: Manjaro Linux x86_64
 CPU: Intel i7-10510U (8) @ 4.900GHz
-Memory: 31773MiB
+Memory: 31773MiB / DDR4 2666MHz
+Storage: NVMe
 ```
 
 ```bash
