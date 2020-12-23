@@ -45,7 +45,7 @@ For detail description of the pdf options check the [playwright](https://playwri
 
 ## Scalability
 
-Fay will open as many pages as possible depending on the available host resources. You can control the maximum active pages by the environment variable `FAY_MAX_ACTIVE_PAGES=20`. As a general thumb you can calculate in the following way. The chrome instance takes around `~45MB`. Every additional page `~15MB`. In case of the limit is reached the server will respond with the status code `429`. The client is reponsible to implement a backoff strategy.
+Fay will open as many pages as possible depending on the available host resources. You can control the maximum active pages by the environment variable `FAY_MAX_ACTIVE_PAGES=20`. As a general thumb you can calculate in the following way. The chrome instance takes around `~45MB`. Every additional page `~15MB`. In case of the limit is reached the server will respond with the status code `429`. The client is responsible to implement a backoff strategy.
 
 In a simple test we could serve up to 20 virtual users over a time window of 5min with an average request duration of ~1s and ~13 req/s. We were even capable to serve up to 100 virtual users over a time window of 5min without any error with an average request duration of ~4.25s and ~11 req/s.
 For more informations check the [load-test](./loadtesting/README.md).
