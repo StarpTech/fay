@@ -66,9 +66,9 @@ var doc = `{
                     },
                     {
                         "type": "boolean",
-                        "default": false,
-                        "description": "Javascript enabled",
-                        "name": "javaScriptEnabled",
+                        "default": true,
+                        "description": "Enable Javascript",
+                        "name": "javascript",
                         "in": "formData"
                     },
                     {

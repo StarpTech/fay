@@ -34,7 +34,7 @@ _The image is relatively big due to the playwright base image. This might be imp
   - `format` (form,query, **default:** `A4`): Page format.
   - `offline` (form,query, **default:** `false`): Disable network connectivity.
   - `media` (form,query, **default:** `print`): Page media emulation.
-  - `javaScriptEnabled` (form,query, **default:** `false`): Enable javascript on the website.
+  - `javascript` (form,query, **default:** `true`): Enable javascript on the website.
   - `marginTop,marginRight,marginBottom,marginLeft` (form,query, **default:** `0`): Set page margin.
   - `headerTemplate` (file, **default:** `<span></span>`): Header template.
   - `footerTemplate` (file, **default:** `<span></span>`): Footer template.
@@ -52,7 +52,7 @@ For more informations check the [load-test](./loadtesting/README.md).
 
 ## Best practice
 
-In order to produce reproducible results try to avoid downloading external resources you can't control and executing javascript. You can inline images and styles in the document. Use the options `offline=true` and `javaScriptEnabled=false` to enforce that. Fonts can be embedded in the docker image to make them accesible to the chromium browser.
+In order to produce reproducible results try to avoid downloading external resources you can't control and executing javascript. You can inline images and styles in the document. Use the options `offline=true` and `javascript=false` to enforce that. Fonts can be embedded in the docker image to make them accesible to the chromium browser.
 
 ## Credits
 

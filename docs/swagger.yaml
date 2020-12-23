@@ -27,10 +27,10 @@ paths:
         in: formData
         name: locale
         type: string
-      - default: false
-        description: Javascript enabled
+      - default: true
+        description: Enable Javascript
         in: formData
-        name: javaScriptEnabled
+        name: javascript
         type: boolean
       - default: A4
         description: Page format

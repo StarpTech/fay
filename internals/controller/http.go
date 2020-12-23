@@ -31,13 +31,13 @@ func (ctrl *Http) Ping(c echo.Context) error {
 }
 
 type ConvertRequest struct {
-	Filename          string `form:"filename" query:"filename"`
-	URL               string `form:"url" query:"url" valid:"url"`
-	Locale            string `form:"locale" query:"locale"`
-	JavaScriptEnabled bool   `form:"javaScriptEnabled" query:"javaScriptEnabled"`
-	Format            string `form:"format" query:"format" valid:"in(Letter|Legal|Tabloid|Ledger|A0|A1|A2|A4|A5|A6)"`
-	Offline           bool   `form:"offline" query:"offline"`
-	Media             string `form:"media" query:"media" valid:"in(screen|print)"`
+	Filename   string `form:"filename" query:"filename"`
+	URL        string `form:"url" query:"url" valid:"url"`
+	Locale     string `form:"locale" query:"locale"`
+	Javascript *bool  `form:"javascript" query:"javascript"`
+	Format     string `form:"format" query:"format" valid:"in(Letter|Legal|Tabloid|Ledger|A0|A1|A2|A4|A5|A6)"`
+	Offline    bool   `form:"offline" query:"offline"`
+	Media      string `form:"media" query:"media" valid:"in(screen|print)"`
 
 	MarginTop    string `form:"marginTop" query:"marginTop"`
 	MarginRight  string `form:"marginRight" query:"marginRight"`
@@ -58,7 +58,7 @@ type ConvertRequest struct {
 // @Param filename formData string false "Filename of the resulting pdf" default(result.pdf)
 // @Param html formData string false "HTML to convert"
 // @Param locale formData string false "Page locale" default(en-US)
-// @Param javaScriptEnabled formData bool false "Javascript enabled" default(false)
+// @Param javascript formData bool false "Enable Javascript" default(true)
 // @Param format formData string false "Page format" default(A4)
 // @Param offline formData bool false "Disable network connectivity" default(false)
 // @Param media formData string false "Page media mode" default(print) Enums(print,screen)
@@ -173,12 +173,15 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	if u.Media == "" {
 		u.Media = "print"
 	}
+	if u.Javascript == nil {
+		u.Javascript = playwright.Bool(true)
+	}
 
 	/*
 		Create new browser context to avoid side-effects (cookies, storage etc...)
 	*/
 	browserContextOptions := playwright.BrowserNewContextOptions{
-		JavaScriptEnabled: playwright.Bool(u.JavaScriptEnabled),
+		JavaScriptEnabled: u.Javascript,
 		Locale:            playwright.String(u.Locale),
 	}
 	browserContext, err := ctrl.Browser.NewContext(browserContextOptions)
@@ -197,6 +200,7 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		c.Logger().Error("could not create new page")
 		return c.HTML(http.StatusInternalServerError, "")
 	}
+	page.SetDefaultTimeout(10000)
 
 	if err := page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media}); err != nil {
 		c.Logger().Errorf("could not emulate media: %s", err)
@@ -204,17 +208,13 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	}
 
 	if u.URL != "" {
-		_, err = page.Goto(u.URL, playwright.PageGotoOptions{
-			Timeout: playwright.Int(10000),
-		})
+		_, err = page.Goto(u.URL)
 		if err != nil {
 			c.Logger().Errorf("could not go to page: %s", err)
 			return c.HTML(http.StatusBadGateway, "")
 		}
 	} else {
-		err := page.SetContent(u.HTML, playwright.PageSetContentOptions{
-			Timeout: playwright.Int(10000),
-		})
+		err := page.SetContent(u.HTML)
 		if err != nil {
 			c.Logger().Errorf("could not set page content: %s", err)
 			return c.HTML(http.StatusInternalServerError, "")
