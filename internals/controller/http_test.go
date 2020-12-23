@@ -172,14 +172,31 @@ func TestPingOK(t *testing.T) {
 }
 
 func TestPingNotOK(t *testing.T) {
+	pw, err := playwright.Run()
+	assert.NoError(t, err)
+
+	browser, err := pw.Chromium.Launch()
+	assert.NoError(t, err)
+	defer pw.Stop()
+
+	onCloseWasCalled := make(chan bool, 1)
+	onClose := func() {
+		onCloseWasCalled <- true
+	}
+
 	e := echo.New()
 
 	req := httptest.NewRequest("GET", "/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	h := Http{
-		Browser: &playwright.Browser{IsConnected: false},
+		Browser: browser,
 	}
+
+	browser.On("close", onClose)
+	assert.True(t, browser.IsConnected())
+	assert.NoError(t, browser.Close())
+	<-onCloseWasCalled
 
 	if assert.NoError(t, h.Ping(c)) {
 		assert.Equal(t, http.StatusServiceUnavailable, rec.Code)

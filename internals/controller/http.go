@@ -24,7 +24,7 @@ type Http struct {
 // @failure 400 {string} string	"error"
 // @Router /ping [get]
 func (ctrl *Http) Ping(c echo.Context) error {
-	if ctrl.Browser.IsConnected {
+	if ctrl.Browser.IsConnected() {
 		return c.HTML(http.StatusOK, "")
 	}
 	return c.HTML(http.StatusServiceUnavailable, "")

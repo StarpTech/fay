@@ -8,12 +8,12 @@ require (
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/labstack/gommon v0.3.0
 	github.com/mattn/go-colorable v0.1.8 // indirect
-	github.com/mxschmitt/playwright-go v0.0.0-20201220104140-f2d7d000d37f
+	github.com/mxschmitt/playwright-go v0.0.0-20201223002452-aef261751a02
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/echo-swagger v1.1.0
 	github.com/swaggo/swag v1.7.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/net v0.0.0-20201216054612-986b41b23924
-	golang.org/x/sys v0.0.0-20201221093633-bc327ba9c2f0 // indirect
-	golang.org/x/tools v0.0.0-20201222163215-f2e330f49058 // indirect
+	golang.org/x/sys v0.0.0-20201223074533-0d417f636930 // indirect
+	golang.org/x/tools v0.0.0-20201223010750-3fa0e8f87c1a // indirect
 )
