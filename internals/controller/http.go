@@ -75,7 +75,7 @@ type ConvertRequest struct {
 // @Router /convert [post]
 func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	if ctrl.MaxActivePages > 0 && ctrl.activePages > ctrl.MaxActivePages {
-		c.Logger().Error("too many requests. Max actives pages of %s has been reached. Please try again later.")
+		c.Logger().Errorf("too many requests. Max actives pages of %d has been reached. Please try again later.", ctrl.MaxActivePages)
 		return c.HTML(http.StatusTooManyRequests, "")
 	}
 
