@@ -43,6 +43,10 @@ _The image is relatively big due to the playwright base image. This might be imp
 
 For detail description of the pdf options check the [playwright](https://playwright.dev/docs/api/class-page?_highlight=pdf#pagepdfoptions) documentation.
 
+## Environment variables
+
+- `FAY_MAX_ACTIVE_PAGES` (**default:** `0`): Controls how many pages can be opened at the same time.
+
 ## Scalability
 
 Fay will open as many pages as possible depending on the available host resources. You can control the maximum active pages by the environment variable `FAY_MAX_ACTIVE_PAGES=20`. As a general thumb you can calculate in the following way. The chrome instance takes around `~45MB`. Every additional page `~15MB`. In case of the limit is reached the server will respond with the status code `429`. The client is responsible to implement a backoff strategy.
