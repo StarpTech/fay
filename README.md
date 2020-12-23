@@ -45,7 +45,7 @@ For detail description of the pdf options check the [playwright](https://playwri
 
 ## Scalability
 
-Playwright is capable to maintain a pool of page instances. This allows to handle many requests at the same time.
+Fay will open as many pages as possible depending on the available host resources. You can control the maximum active pages by the environment variable `FAY_MAX_ACTIVE_PAGES=20`. As a general thumb you can calculate in the following way. The chrome instance takes around `~45MB`. Every additional page `~10MB`. Everything else depends on the page you will load. If you have to serve 20 users per second you will have a base memory consumption of `~250MB`. In case of the limit is reached the server will respond with the status code `429`.
 
 In a simple test we could serve up to 20 virtual users over a time window of 5min with an average request duration of ~1s and ~13 req/s. We were even capable to serve up to 100 virtual users over a time window of 5min without any error with an average request duration of ~4.25s and ~11 req/s.
 For more informations check the [load-test](./loadtesting/README.md).

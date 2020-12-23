@@ -2,6 +2,8 @@ package server
 
 import (
 	"log"
+	"os"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -35,8 +37,11 @@ func New() *Server {
 	e.HideBanner = true
 	e.Logger.SetLevel(dLog.INFO)
 
+	maxActivePages, _ := strconv.Atoi(os.Getenv("FAY_MAX_ACTIVE_PAGES"))
+
 	httpController := controller.Http{
-		Browser: browser,
+		Browser:        browser,
+		MaxActivePages: uint64(maxActivePages), // ~1 page = 15MB + 45MB (chrome initial) = ~60MB
 	}
 
 	e.POST("/convert", httpController.ConvertHTML)

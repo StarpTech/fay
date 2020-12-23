@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"sync/atomic"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
@@ -13,7 +14,9 @@ import (
 )
 
 type Http struct {
-	Browser *playwright.Browser
+	Browser        *playwright.Browser
+	MaxActivePages uint64
+	activePages    uint64
 }
 
 // Ping godoc
@@ -71,6 +74,11 @@ type ConvertRequest struct {
 // @Success 200 {file} file
 // @Router /convert [post]
 func (ctrl *Http) ConvertHTML(c echo.Context) error {
+	if ctrl.MaxActivePages > 0 && ctrl.activePages > ctrl.MaxActivePages {
+		c.Logger().Error("too many requests. Max actives pages of %s has been reached. Please try again later.")
+		return c.HTML(http.StatusTooManyRequests, "")
+	}
+
 	/*
 		Extract data from request
 	*/
@@ -200,6 +208,12 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		c.Logger().Error("could not create new page")
 		return c.HTML(http.StatusInternalServerError, "")
 	}
+
+	atomic.AddUint64(&ctrl.activePages, 1)
+	defer func() {
+		atomic.AddUint64(&ctrl.activePages, ^uint64(0))
+	}()
+
 	page.SetDefaultTimeout(10000)
 
 	if err := page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media}); err != nil {
