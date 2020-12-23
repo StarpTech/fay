@@ -2,7 +2,7 @@
     <img src="https://raw.githubusercontent.com/StarpTech/fay/main/assets/logo.png" alt="fay logo"/>
 </p>
 <h3 align="center">Fay</h3>
-<p align="center">HTTP Service that expose the PDF rendering capabilities of <a href="https://github.com/microsoft/playwright">Playwright</a>.</p>
+<p align="center">Stateless, Fast and Reliable PDF rendering service.</p>
 <p align="center"><a href="https://hub.docker.com/repository/docker/starptech/fay">Dockerhub</a> &#183; <a href="/loadtesting/README.md">Load tests</a> &#183; <a href="/.github/CONTRIBUTING.md">Contributing</a></p>
 <p align="center"><a href="https://github.com/StarpTech/fay/actions?query=workflow%3Atests" rel="nofollow"><img src="https://github.com/StarpTech/fay/workflows/tests/badge.svg" style="max-width:100%;"></a></p>
 
