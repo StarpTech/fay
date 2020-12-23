@@ -186,7 +186,6 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		c.Logger().Errorf("could not create new context: %s", err)
 		return c.HTML(http.StatusInternalServerError, "")
 	}
-	defer browserContext.Close()
 
 	/*
 		Open a new page. Playwright will handle the queue.
@@ -199,7 +198,10 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 		return c.HTML(http.StatusInternalServerError, "")
 	}
 
-	page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media})
+	if err := page.EmulateMedia(playwright.PageEmulateMediaOptions{Media: u.Media}); err != nil {
+		c.Logger().Errorf("could not emulate media: %s", err)
+		return c.HTML(http.StatusBadGateway, "")
+	}
 
 	if u.URL != "" {
 		_, err = page.Goto(u.URL, playwright.PageGotoOptions{
@@ -236,14 +238,20 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 			Left:   u.MarginLeft,
 		},
 	})
+	if err != nil {
+		c.Logger().Errorf("could not create pdf from page: %s", err)
+		return c.HTML(http.StatusInternalServerError, "")
+	}
+
+	if err := browserContext.Close(); err != nil {
+		c.Logger().Errorf("could not close browser context: %s", err)
+	}
 
 	tmpfile, err := ioutil.TempFile(os.TempDir(), "fay-conversion-")
 	if err != nil {
 		c.Logger().Errorf("could not create temp pdf file: %s", err)
 		return c.HTML(http.StatusInternalServerError, "")
 	}
-	defer os.Remove(tmpfile.Name())
-	defer tmpfile.Close()
 
 	if _, err = io.Copy(tmpfile, bytes.NewReader(pdfBytes)); err != nil {
 		c.Logger().Errorf("could not write pdf to disk: %s", err)
@@ -253,6 +261,9 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	if err := c.Attachment(tmpfile.Name(), u.Filename); err != nil {
 		c.Logger().Errorf("could not attach pdf: %s", err)
 	}
+
+	_ = tmpfile.Close()
+	_ = os.Remove(tmpfile.Name())
 
 	return nil
 }
