@@ -17,7 +17,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func newFileUploadRequest(uri string, params map[string]string, files map[string]string) (*http.Request, error) {
+func newMultipartRequest(uri string, params map[string]string, files map[string]string) (*http.Request, error) {
 	body := new(bytes.Buffer)
 	writer := multipart.NewWriter(body)
 	defer writer.Close()
@@ -60,7 +60,7 @@ func TestDifferentFilename(t *testing.T) {
 		"filename": "foo.pdf",
 	}
 	files := map[string]string{}
-	req, err := newFileUploadRequest("/", params, files)
+	req, err := newMultipartRequest("/", params, files)
 	assert.NoError(t, err)
 
 	rec := httptest.NewRecorder()
@@ -74,6 +74,8 @@ func TestDifferentFilename(t *testing.T) {
 		assert.Equal(t, "attachment; filename=\"foo.pdf\"", rec.HeaderMap.Get("content-disposition"))
 		assert.Equal(t, "application/pdf", rec.HeaderMap.Get("content-type"))
 		assert.Equal(t, "bytes", rec.HeaderMap.Get("accept-ranges"))
+
+		assert.Equal(t, "application/pdf", http.DetectContentType(rec.Body.Bytes()))
 		contentLength, _ := strconv.Atoi(rec.HeaderMap.Get("content-length"))
 		assert.Greater(t, contentLength, 200)
 	}
@@ -94,7 +96,7 @@ func TestRenderUrlToPDF(t *testing.T) {
 		"url": "https://google.com",
 	}
 	files := map[string]string{}
-	req, err := newFileUploadRequest("/", params, files)
+	req, err := newMultipartRequest("/", params, files)
 	assert.NoError(t, err)
 
 	rec := httptest.NewRecorder()
@@ -108,6 +110,8 @@ func TestRenderUrlToPDF(t *testing.T) {
 		assert.Equal(t, "attachment; filename=\"result.pdf\"", rec.HeaderMap.Get("content-disposition"))
 		assert.Equal(t, "application/pdf", rec.HeaderMap.Get("content-type"))
 		assert.Equal(t, "bytes", rec.HeaderMap.Get("accept-ranges"))
+
+		assert.Equal(t, "application/pdf", http.DetectContentType(rec.Body.Bytes()))
 		contentLength, _ := strconv.Atoi(rec.HeaderMap.Get("content-length"))
 		assert.Greater(t, contentLength, 200)
 	}
@@ -129,7 +133,7 @@ func TestRenderHTMLToPDF(t *testing.T) {
 	files := map[string]string{
 		"html": path.Join(wd, "../../example/page.html"),
 	}
-	req, err := newFileUploadRequest("/", params, files)
+	req, err := newMultipartRequest("/", params, files)
 	assert.NoError(t, err)
 
 	rec := httptest.NewRecorder()
@@ -143,6 +147,8 @@ func TestRenderHTMLToPDF(t *testing.T) {
 		assert.Equal(t, "attachment; filename=\"result.pdf\"", rec.HeaderMap.Get("content-disposition"))
 		assert.Equal(t, "application/pdf", rec.HeaderMap.Get("content-type"))
 		assert.Equal(t, "bytes", rec.HeaderMap.Get("accept-ranges"))
+
+		assert.Equal(t, "application/pdf", http.DetectContentType(rec.Body.Bytes()))
 		contentLength, _ := strconv.Atoi(rec.HeaderMap.Get("content-length"))
 		assert.Greater(t, contentLength, 200)
 	}
