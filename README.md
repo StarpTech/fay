@@ -52,7 +52,7 @@ For detail description of the pdf options check the [playwright](https://playwri
 Fay is staless and can be scaled infinitely. If you run fay on your infrastructure you should keep some things in mind.
 Fay will open as many pages as possible depending on the available host resources. You can control the maximum active pages by the environment variable `FAY_MAX_ACTIVE_PAGES=20`. As a general thumb you can calculate the base memory consumption in the following way. The chrome instance takes around `~45MB`. Every additional page `~15MB`. In case of the limit is reached the server will respond with status code `429`. The client is responsible to implement a backoff strategy.
 
-A single fay instance (static HTML mode) is capable to serve 20 parallel virtual users with an average request duration of `~0.5`s. The memory consumption was `~500MB`.
+A single fay instance (static HTML mode) is capable to serve 20 parallel virtual users with an average request duration of `~0.5s`. The memory consumption was `~500MB`.
 
 For more informations check the [load-test](./loadtesting/README.md).
 
