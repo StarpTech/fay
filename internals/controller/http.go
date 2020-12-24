@@ -269,6 +269,10 @@ func (ctrl *httpController) ConvertHTML(c echo.Context) error {
 		c.Logger().Errorf("could not create temp pdf file: %s", err)
 		return c.HTML(http.StatusInternalServerError, "")
 	}
+	defer func() {
+		_ = tmpfile.Close()
+		_ = os.Remove(tmpfile.Name())
+	}()
 
 	if _, err = io.Copy(tmpfile, bytes.NewReader(pdfBytes)); err != nil {
 		c.Logger().Errorf("could not write pdf to disk: %s", err)
@@ -277,10 +281,8 @@ func (ctrl *httpController) ConvertHTML(c echo.Context) error {
 
 	if err := c.Attachment(tmpfile.Name(), u.Filename); err != nil {
 		c.Logger().Errorf("could not attach pdf: %s", err)
+		return c.HTML(http.StatusInternalServerError, "")
 	}
-
-	_ = tmpfile.Close()
-	_ = os.Remove(tmpfile.Name())
 
 	return nil
 }
