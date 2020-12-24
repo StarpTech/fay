@@ -8,7 +8,7 @@ let pageFile = open("../example/page.html", "b");
 let failCounter = new Counter("failed requests");
 
 export let options = {
-  stages: [{ duration: "5m", target: __ENV.MAX_VUS }],
+  stages: [{ duration: "1m", target: __ENV.MAX_VUS }],
   thresholds: {
     "failed requests": [
       {
@@ -30,6 +30,7 @@ export default function () {
     "is status 200": (r) => r.status === 200,
     "is not status 504": (r) => r.status !== 504,
     "is not status 500": (r) => r.status !== 500,
+    "is not status 429": (r) => r.status !== 429,
   });
   if (res.status !== 200) {
     failCounter.add(1);
