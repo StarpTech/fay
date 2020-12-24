@@ -38,11 +38,7 @@ func New() *Server {
 	e.Logger.SetLevel(dLog.INFO)
 
 	maxActivePages, _ := strconv.Atoi(os.Getenv("FAY_MAX_ACTIVE_PAGES"))
-
-	httpController := controller.Http{
-		Browser:        browser,
-		MaxActivePages: uint64(maxActivePages), // ~1 page = 15MB + 45MB (chrome initial) = ~60MB
-	}
+	httpController := controller.New(browser, uint64(maxActivePages))
 
 	e.POST("/convert", httpController.ConvertHTML)
 	e.GET("/ping", httpController.Ping)

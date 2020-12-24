@@ -8,15 +8,25 @@ import (
 	"os"
 	"sync/atomic"
 
-	"github.com/asaskevich/govalidator"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/mxschmitt/playwright-go"
 )
 
-type Http struct {
+type httpController struct {
 	Browser        *playwright.Browser
+	Validator      *validator.Validate
 	MaxActivePages uint64
 	activePages    uint64
+}
+
+func New(browser *playwright.Browser, maxActivePages uint64) *httpController {
+	validate := validator.New()
+	return &httpController{
+		Browser:        browser,
+		Validator:      validate,
+		MaxActivePages: uint64(maxActivePages), // ~1 page = 15MB + 45MB (chrome initial) = ~60MB
+	}
 }
 
 // Ping godoc
@@ -26,7 +36,7 @@ type Http struct {
 // @Success 200 {string} string	"ok"
 // @failure 400 {string} string	"error"
 // @Router /ping [get]
-func (ctrl *Http) Ping(c echo.Context) error {
+func (ctrl *httpController) Ping(c echo.Context) error {
 	if ctrl.Browser.IsConnected() {
 		return c.HTML(http.StatusOK, "")
 	}
@@ -35,21 +45,21 @@ func (ctrl *Http) Ping(c echo.Context) error {
 
 type ConvertRequest struct {
 	Filename   string `form:"filename" query:"filename"`
-	URL        string `form:"url" query:"url" valid:"url"`
+	URL        string `form:"url" query:"url" validate:"omitempty,url"`
 	Locale     string `form:"locale" query:"locale"`
-	Javascript *bool  `form:"javascript" query:"javascript"`
-	Format     string `form:"format" query:"format" valid:"in(Letter|Legal|Tabloid|Ledger|A0|A1|A2|A4|A5|A6)"`
+	Javascript bool   `form:"javascript" query:"javascript"`
+	Format     string `form:"format" query:"format" validate:"oneof=Letter Legal Tabloid Ledger A0 A1 A2 A4 A5 A6"`
 	Offline    bool   `form:"offline" query:"offline"`
-	Media      string `form:"media" query:"media" valid:"in(screen|print)"`
+	Media      string `form:"media" query:"media" validate:"oneof=screen print"`
 
 	MarginTop    string `form:"marginTop" query:"marginTop"`
 	MarginRight  string `form:"marginRight" query:"marginRight"`
 	MarginBottom string `form:"marginBottom" query:"marginBottom"`
 	MarginLeft   string `form:"marginLeft" query:"marginLeft"`
 
-	FooterTemplate string `form:"footerTemplate"`
-	HeaderTemplate string `form:"headerTemplate"`
-	HTML           string `form:"html"`
+	FooterTemplate string `form:"footerTemplate" validate:"omitempty,html"`
+	HeaderTemplate string `form:"headerTemplate" validate:"omitempty,html"`
+	HTML           string `form:"html" validate:"omitempty,html"`
 }
 
 // ConvertHTML godoc
@@ -73,7 +83,7 @@ type ConvertRequest struct {
 // @Produce application/pdf
 // @Success 200 {file} file
 // @Router /convert [post]
-func (ctrl *Http) ConvertHTML(c echo.Context) error {
+func (ctrl *httpController) ConvertHTML(c echo.Context) error {
 	if ctrl.MaxActivePages > 0 && ctrl.activePages > ctrl.MaxActivePages {
 		c.Logger().Errorf("too many requests. Max actives pages of %d has been reached. Please try again later.", ctrl.MaxActivePages)
 		return c.HTML(http.StatusTooManyRequests, "")
@@ -82,7 +92,15 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	/*
 		Extract data from request
 	*/
-	u := new(ConvertRequest)
+	u := &ConvertRequest{
+		Filename:       "result.pdf",
+		FooterTemplate: "<span></span>",
+		HeaderTemplate: "<span></span>",
+		Format:         "A4",
+		Media:          "print",
+		Javascript:     true,
+	}
+
 	if err := c.Bind(u); err != nil {
 		c.Logger().Errorf("request bind: %s", err)
 		return c.HTML(http.StatusBadRequest, "")
@@ -91,9 +109,16 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	/*
 		Request validation
 	*/
-	_, err := govalidator.ValidateStruct(u)
+	err := ctrl.Validator.Struct(u)
 	if err != nil {
-		c.Logger().Errorf("request validation: %s", err)
+		// this check is only needed when your code could produce
+		// an invalid value for validation such as interface with nil
+		// value most including myself do not usually have code like this.
+		if _, ok := err.(*validator.InvalidValidationError); ok {
+			c.Logger().Errorf("invalid validation: %s", err)
+		} else {
+			c.Logger().Errorf("request validation: %s", err)
+		}
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
@@ -164,32 +189,10 @@ func (ctrl *Http) ConvertHTML(c echo.Context) error {
 	}
 
 	/*
-		Defaults
-	*/
-	if u.Filename == "" {
-		u.Filename = "result.pdf"
-	}
-	if u.FooterTemplate == "" {
-		u.FooterTemplate = "<span></span>"
-	}
-	if u.HeaderTemplate == "" {
-		u.HeaderTemplate = "<span></span>"
-	}
-	if u.Format == "" {
-		u.Format = "A4"
-	}
-	if u.Media == "" {
-		u.Media = "print"
-	}
-	if u.Javascript == nil {
-		u.Javascript = playwright.Bool(true)
-	}
-
-	/*
 		Create new browser context to avoid side-effects (cookies, storage etc...)
 	*/
 	browserContextOptions := playwright.BrowserNewContextOptions{
-		JavaScriptEnabled: u.Javascript,
+		JavaScriptEnabled: playwright.Bool(u.Javascript),
 		Locale:            playwright.String(u.Locale),
 	}
 	browserContext, err := ctrl.Browser.NewContext(browserContextOptions)

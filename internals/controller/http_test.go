@@ -65,9 +65,7 @@ func TestDifferentFilename(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := Http{
-		Browser: browser,
-	}
+	h := New(browser, 0)
 
 	if assert.NoError(t, h.ConvertHTML(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
@@ -101,9 +99,7 @@ func TestRenderUrlToPDF(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := Http{
-		Browser: browser,
-	}
+	h := New(browser, 0)
 
 	if assert.NoError(t, h.ConvertHTML(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
@@ -138,9 +134,7 @@ func TestRenderHTMLToPDF(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := Http{
-		Browser: browser,
-	}
+	h := New(browser, 0)
 
 	if assert.NoError(t, h.ConvertHTML(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
@@ -168,9 +162,7 @@ func TestPingOK(t *testing.T) {
 	req := httptest.NewRequest("GET", "/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := Http{
-		Browser: browser,
-	}
+	h := New(browser, 0)
 
 	if assert.NoError(t, h.Ping(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
@@ -195,9 +187,7 @@ func TestPingNotOK(t *testing.T) {
 	req := httptest.NewRequest("GET", "/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	h := Http{
-		Browser: browser,
-	}
+	h := New(browser, 0)
 
 	browser.On("close", onClose)
 	assert.True(t, browser.IsConnected())
