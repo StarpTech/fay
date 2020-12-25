@@ -42,6 +42,7 @@ func New() *Server {
 
 	e.POST("/convert", httpController.ConvertHTML)
 	e.GET("/ping", httpController.Ping)
+	e.GET("/metrics", httpController.Metrics)
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	return &Server{

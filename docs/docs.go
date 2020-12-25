@@ -137,6 +137,26 @@ var doc = `{
                 }
             }
         },
+        "/metrics": {
+            "get": {
+                "description": "Returns basic metrics about the server",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "metrics"
+                ],
+                "summary": "Basic metrics endpoint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.metricsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "Check if the server is ready to accept requests",
@@ -157,6 +177,22 @@ var doc = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.metricsResponse": {
+            "type": "object",
+            "properties": {
+                "activeContexts": {
+                    "type": "integer"
+                },
+                "activePages": {
+                    "type": "integer"
+                },
+                "isConnected": {
+                    "type": "boolean"
                 }
             }
         }

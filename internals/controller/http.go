@@ -20,6 +20,12 @@ type httpController struct {
 	activePages    uint64
 }
 
+type metricsResponse struct {
+	ActivePages    uint64 `json:"activePages"`
+	ActiveContexts int    `json:"activeContexts"`
+	IsConnected    bool   `json:"isConnected"`
+}
+
 func New(browser *playwright.Browser, maxActivePages uint64) *httpController {
 	validate := validator.New()
 	return &httpController{
@@ -41,6 +47,21 @@ func (ctrl *httpController) Ping(c echo.Context) error {
 		return c.HTML(http.StatusOK, "")
 	}
 	return c.HTML(http.StatusServiceUnavailable, "")
+}
+
+// Metrics godoc
+// @Summary Basic metrics endpoint
+// @Description Returns basic metrics about the server
+// @Tags metrics
+// @Produce  json
+// @Success 200 {object} metricsResponse
+// @Router /metrics [get]
+func (ctrl *httpController) Metrics(c echo.Context) error {
+	return c.JSON(http.StatusOK, metricsResponse{
+		ActivePages:    ctrl.activePages,
+		IsConnected:    ctrl.Browser.IsConnected(),
+		ActiveContexts: len(ctrl.Browser.Contexts()),
+	})
 }
 
 type ConvertRequest struct {

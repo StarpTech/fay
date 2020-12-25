@@ -148,6 +148,34 @@ func TestRenderHTMLToPDF(t *testing.T) {
 	}
 }
 
+func TestMetrics(t *testing.T) {
+	pw, err := playwright.Run()
+	assert.NoError(t, err)
+
+	browser, err := pw.Chromium.Launch()
+	assert.NoError(t, err)
+	defer pw.Stop()
+	defer browser.Close()
+
+	e := echo.New()
+
+	req := httptest.NewRequest("GET", "/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	h := New(browser, 0)
+
+	if assert.NoError(t, h.Metrics(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.JSONEq(t, `
+		{
+			"activeContexts": 0,
+			"activePages": 0,
+			"isConnected": true
+		}
+		`, rec.Body.String())
+	}
+}
+
 func TestPingOK(t *testing.T) {
 	pw, err := playwright.Run()
 	assert.NoError(t, err)

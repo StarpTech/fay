@@ -1,4 +1,14 @@
 basePath: /
+definitions:
+  controller.metricsResponse:
+    properties:
+      activeContexts:
+        type: integer
+      activePages:
+        type: integer
+      isConnected:
+        type: boolean
+    type: object
 host: localhost:3000
 info:
   contact: {}
@@ -80,6 +90,19 @@ paths:
       summary: Converts a URL or HTML to PDF document
       tags:
       - convert
+  /metrics:
+    get:
+      description: Returns basic metrics about the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.metricsResponse'
+      summary: Basic metrics endpoint
+      tags:
+      - metrics
   /ping:
     get:
       description: Check if the server is ready to accept requests
