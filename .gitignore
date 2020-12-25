@@ -106,4 +106,5 @@ dist
 
 .ms-playwright
 /fay
+/fayinstall
 /html.pdf

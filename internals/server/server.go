@@ -23,11 +23,11 @@ type Server struct {
 func New() *Server {
 	pw, err := playwright.Run()
 	if err != nil {
-		log.Fatalln("could not run playwright")
+		log.Fatalf("could not run playwright: %s\n", err)
 	}
 	browser, err := pw.Chromium.Launch()
 	if err != nil {
-		log.Fatalln("could not launch browser")
+		log.Fatalf("could not launch browser: %s\n", err)
 	}
 
 	e := echo.New()

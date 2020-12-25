@@ -9,7 +9,7 @@ require (
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/labstack/gommon v0.3.0
 	github.com/mattn/go-colorable v0.1.8 // indirect
-	github.com/mxschmitt/playwright-go v0.0.0-20201225173657-91efe4edc2c4
+	github.com/mxschmitt/playwright-go v0.0.0-20201225175346-12c39ada93ff
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/echo-swagger v1.1.0
 	github.com/swaggo/swag v1.7.0

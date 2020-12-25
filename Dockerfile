@@ -39,9 +39,12 @@ COPY .docker/fonts.conf /etc/fonts/conf.d/100-gotenberg.conf
 FROM golang:1.15 as builder
 WORKDIR /go/src/app
 COPY . .
-RUN chmod +x scripts/build.sh && ./scripts/build.sh
+RUN ./scripts/build-installer.sh && ./scripts/build.sh
 
 FROM base as production
 COPY --from=builder /go/src/app/fay .
+COPY --from=builder /go/src/app/fayinstaller .
+# Ensure that client and browser are baked into image
+RUN ./fayinstaller
 EXPOSE 3000
 CMD ["./fay"]
