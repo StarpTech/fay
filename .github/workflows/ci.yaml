@@ -1,12 +1,12 @@
 on:
   push:
-      paths-ignore:
-          - 'docs/**'
-          - '*.md'
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
   pull_request:
-      paths-ignore:
-          - 'docs/**'
-          - '*.md'
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
 
 name: tests
 env:
@@ -21,27 +21,27 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: ${{ matrix.go-version }}
-    - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@v2
 
-    - name: Cache playwright browsers
-      uses: actions/cache@v1
-      with:
-        path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
-        restore-keys: ${{ runner.os }}-playwright-
+      - name: Cache playwright browsers
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-playwright-
 
-    - name: Cache go modules
-      uses: actions/cache@v1
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
-        restore-keys: ${{ runner.os }}-go-
+      - name: Cache go modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
 
-    - name: Build
-      run: ./scripts/build.sh
+      - name: Build
+        run: ./scripts/build.sh
 
-    - name: Test
-      run: ./scripts/test.sh
+      - name: Test
+        run: ./scripts/test.sh

@@ -1,8 +1,12 @@
 on:
   push:
+    paths-ignore:
+      - "*.md"
     branches:
       - main
   pull_request:
+    paths-ignore:
+        - '*.md'
     branches:
       - main
 
@@ -19,36 +23,36 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: ${{ matrix.go-version }}
-    - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@v2
 
-    - name: Cache playwright browsers
-      uses: actions/cache@v1
-      with:
-        path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
-        restore-keys: ${{ runner.os }}-playwright-
+      - name: Cache playwright browsers
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-playwright-
 
-    - name: Cache go modules
-      uses: actions/cache@v1
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
-        restore-keys: ${{ runner.os }}-go-
+      - name: Cache go modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
 
-    - name: Run server with race detector
-      run: go run -race cmd/fay/main.go &
+      - name: Run server with race detector
+        run: go run -race cmd/fay/main.go &
 
-    - name: Wait for server to be ready
-      run: |
-        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/ping)" != "200" ]]; do sleep 5; done'
+      - name: Wait for server to be ready
+        run: |
+          bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/ping)" != "200" ]]; do sleep 5; done'
 
-    - name: Install k6
-      run: |
-        curl https://github.com/loadimpact/k6/releases/download/v0.29.0/k6-v0.29.0-linux64.tar.gz -L | tar xvz --strip-components 1
+      - name: Install k6
+        run: |
+          curl https://github.com/loadimpact/k6/releases/download/v0.29.0/k6-v0.29.0-linux64.tar.gz -L | tar xvz --strip-components 1
 
-    - name: Run local k6 test
-      run: |
-        ./k6 run --env MAX_VUS=20 --env DURATION=1m --env BASE_URL=http://localhost:3000 ./loadtesting/html.js
+      - name: Run local k6 test
+        run: |
+          ./k6 run --env MAX_VUS=20 --env DURATION=1m --env BASE_URL=http://localhost:3000 ./loadtesting/html.js

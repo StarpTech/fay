@@ -55,8 +55,7 @@ Fay will open as many pages as possible depending on the available host resource
 
 A single fay instance (static HTML mode) is capable to serve 20 parallel virtual users with an average request duration of `~0.5s`. The memory consumption was `~500MB`.
 
-For more informations check the [load-test](./loadtesting/README.md).
-
+Load tests are part of our CI. For more informations check the [load-test](./loadtesting/README.md).
 ## Best practice
 
 In order to produce reproducible results try to avoid downloading external resources you can't control and executing javascript. You can inline images and styles in the document. Use the options `offline=true` and `javascript=false` to enforce that. Fonts can be embedded in the docker image to make them accesible to the chromium browser.
