@@ -19,11 +19,23 @@ find below useful information about how to contribute to the Fay project.
 3. Push to the branch (`git push origin my-new-feature`)
 4. Create a new pull request
 
+### Building
+
+```bash
+./scripts/build.sh
+```
+
 ### Testing
 
 ```bash
 ./scripts/test.sh
 ./scripts/coverage.sh
+```
+
+### Update swagger
+
+```bash
+./scripts/swagger.sh
 ```
 
 ## Development
@@ -32,7 +44,6 @@ find below useful information about how to contribute to the Fay project.
 2. Serve example template `serve -l 3001 ./example`.
 3. Run server `go run cmd/fay/main.go`.
 4. Open swagger [endpoint](http://localhost:3000/swagger/index.html).
-
 
 ## Reporting bugs and feature request
 
