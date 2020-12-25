@@ -33,6 +33,13 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
           restore-keys: ${{ runner.os }}-playwright-
 
+      - name: Cache playwright client driver
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/ms-playwright-go
+          key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-playwright-
+
       - name: Cache go modules
         uses: actions/cache@v1
         with:

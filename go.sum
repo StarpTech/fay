@@ -82,6 +82,10 @@ github.com/mattn/go-isatty v0.0.12 h1:wuysRhFDzyxgEmMf5xjvJ2M9dZoWAXNNr5LSBS7uHX
 github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
 github.com/mxschmitt/playwright-go v0.0.0-20201223002452-aef261751a02 h1:VpqUc0AWe+N5LzM3NFi/Rmp+UaSAT6/3trlGL73Xva0=
 github.com/mxschmitt/playwright-go v0.0.0-20201223002452-aef261751a02/go.mod h1:jyFRo259BtiMWc5or7cQRtbYlH3eetqUYq5ohSR/xkM=
+github.com/mxschmitt/playwright-go v0.0.0-20201223132049-d175329b81fa h1:cJ8/FQUC0FX6RyW8Fnmvn5lfKr4Z7E+4RtFwklpOjZw=
+github.com/mxschmitt/playwright-go v0.0.0-20201223132049-d175329b81fa/go.mod h1:jyFRo259BtiMWc5or7cQRtbYlH3eetqUYq5ohSR/xkM=
+github.com/mxschmitt/playwright-go v0.0.0-20201225173657-91efe4edc2c4 h1:/ptYSAaGCgvnP1sTEWYhVs3GreP6dpRNfZTLcMA34Vw=
+github.com/mxschmitt/playwright-go v0.0.0-20201225173657-91efe4edc2c4/go.mod h1:jyFRo259BtiMWc5or7cQRtbYlH3eetqUYq5ohSR/xkM=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
