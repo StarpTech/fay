@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	playwright.Install(&playwright.RunOptions{})
+	_ = playwright.Install(&playwright.RunOptions{})
 }
