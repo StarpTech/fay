@@ -32,22 +32,22 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
-          restore-keys: ${{ runner.os }}-playwright-
+          key: ${{ runner.os }}-playwright-v1-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-playwright-v1
 
       - name: Cache playwright client driver
         uses: actions/cache@v1
         with:
           path: ~/.cache/ms-playwright-go
-          key: ${{ runner.os }}-playwright-go-${{ hashFiles('go.sum') }}
-          restore-keys: ${{ runner.os }}-playwright-go-
+          key: ${{ runner.os }}-playwright-go-v1-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-playwright-go-v1
 
       - name: Cache go modules
         uses: actions/cache@v1
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
-          restore-keys: ${{ runner.os }}-go-
+          key: ${{ runner.os }}-go-v1-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-go-v1
 
       - name: Run server with race detector
         run: go run -race cmd/fay/main.go &
