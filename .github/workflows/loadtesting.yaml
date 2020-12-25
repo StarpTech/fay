@@ -41,8 +41,19 @@ jobs:
     - name: Run server with race detector
       run: go run -race cmd/fay/main.go &
 
-    - name: Run local k6 test
-      uses: k6io/action@v0.1
+    - name: Wait for server to be ready
+      uses: nev7n/wait_for_response@v1.0.1
       with:
-        filename: ./loadtesting/html.js
-        flags: --env MAX_VUS=20 --env DURATION=1m --env BASE_URL=http://localhost:3000 html.js
+        url: 'http://localhost:3000/ping'
+        responseCode: 200
+        timeout: 2000
+        interval: 250
+
+    - name: Install k6
+      run: |
+        curl https://github.com/loadimpact/k6/releases/download/v0.29.0/k6-v0.29.0-linux64.tar.gz -L | tar xvz --strip-components 1
+
+    - name: Run local k6 test
+      run: |
+        sleep 2000
+        ./k6 run --env MAX_VUS=20 --env DURATION=5m --env BASE_URL=http://localhost:3000 ./loadtesting/html.js
