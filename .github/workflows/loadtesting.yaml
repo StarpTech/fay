@@ -1,0 +1,53 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+name: loadtesting
+env:
+  GO111MODULE: on
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.15.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - uses: actions/checkout@v2
+
+    - name: Cache playwright browsers
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('go.sum') }}
+        restore-keys: ${{ runner.os }}-playwright-
+
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+        restore-keys: ${{ runner.os }}-go-
+
+    - name: Build
+      run: ./scripts/build.sh
+
+    - name: Start server
+      run: |
+        chmod +x fay
+        ./fay
+
+    - name: Run local k6 test
+      uses: k6io/action@v0.1
+      with:
+        filename: ./loadtesting/html.js
+        flags: --env MAX_VUS=20 --env DURATION=1m --env BASE_URL=http://localhost:3000 html.js

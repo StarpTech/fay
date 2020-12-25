@@ -8,7 +8,7 @@ let pageFile = open("../example/page.html", "b");
 let failCounter = new Counter("failed requests");
 
 export let options = {
-  stages: [{ duration: "1m", target: __ENV.MAX_VUS }],
+  stages: [{ duration: __ENV.DURATION || "5m", target: __ENV.MAX_VUS }],
   thresholds: {
     "failed requests": [
       {
