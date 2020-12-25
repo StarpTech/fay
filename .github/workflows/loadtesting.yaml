@@ -38,13 +38,8 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
         restore-keys: ${{ runner.os }}-go-
 
-    - name: Build
-      run: ./scripts/build.sh
-
-    - name: Start server
-      run: |
-        chmod +x fay
-        ./fay
+    - name: Run server with race detector
+      run: go run -race cmd/fay/main.go &
 
     - name: Run local k6 test
       uses: k6io/action@v0.1
