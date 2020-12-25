@@ -42,12 +42,8 @@ jobs:
       run: go run -race cmd/fay/main.go &
 
     - name: Wait for server to be ready
-      uses: nev7n/wait_for_response@v1.0.1
-      with:
-        url: 'http://localhost:3000/ping'
-        responseCode: 200
-        timeout: 2000
-        interval: 250
+      run: |
+        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/ping)" != "200" ]]; do sleep 5; done'
 
     - name: Install k6
       run: |
