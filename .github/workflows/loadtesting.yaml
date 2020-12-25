@@ -51,5 +51,4 @@ jobs:
 
     - name: Run local k6 test
       run: |
-        sleep 2000
-        ./k6 run --env MAX_VUS=20 --env DURATION=5m --env BASE_URL=http://localhost:3000 ./loadtesting/html.js
+        ./k6 run --env MAX_VUS=20 --env DURATION=1m --env BASE_URL=http://localhost:3000 ./loadtesting/html.js
