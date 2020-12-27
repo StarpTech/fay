@@ -58,7 +58,7 @@ A single fay instance (static HTML mode) is capable to serve 20 parallel virtual
 Load tests are part of our CI. For more informations check the [load-test](./loadtesting/README.md).
 ## Best practice
 
-In order to produce reproducible results try to avoid downloading external resources you can't control and executing javascript. You can inline images and styles in the document. Use the options `offline=true` and `javascript=false` to enforce that. Fonts can be embedded in the docker image to make them accesible to the chromium browser.
+In order to produce reproducible results try to avoid downloading external resources you can't control and executing javascript. Use the options `offline=true` and `javascript=false` to enforce that. You can inline images / fonts / styles with base64 in the document. Fonts can also be embedded in the docker image to make them accesible to the chromium browser.
 
 ## Credits
 
